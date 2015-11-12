@@ -6,6 +6,7 @@ import android.widget.*;
 import android.content.Intent;
 import android.view.View;
 import android.media.MediaPlayer;
+import android.graphics.Color;
 
 public class SoundActivity extends Activity implements Runnable
 {
@@ -16,6 +17,8 @@ public class SoundActivity extends Activity implements Runnable
     private MediaPlayer soundPlayer;
     private SeekBar soundSeekBar;
     private Thread soundThread;
+    private Button pressStartButton;
+    private Button forceButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -28,7 +31,12 @@ public class SoundActivity extends Activity implements Runnable
         stopButton = (Button) findViewById(R.id.stopButton);
         soundSeekBar = (SeekBar) findViewById(R.id.seekBar);
         videoButton = (Button) findViewById(R.id.toVideoButton);
+        pressStartButton = (Button) findViewById(R.id.pressStartButton);
+        forceButton = (Button) findViewById(R.id.forceButton);
         soundPlayer = MediaPlayer.create(this.getBaseContext(), R.raw.alanwalker_force);
+
+        forceButton.setBackgroundColor(Color.GREEN);
+        pressStartButton.setBackgroundColor(Color.WHITE);
 
         setupListeners();
 
@@ -63,6 +71,8 @@ public class SoundActivity extends Activity implements Runnable
             {
                 soundPlayer.stop();
                 soundPlayer = MediaPlayer.create(getBaseContext(), R.raw.alanwalker_force);
+                pressStartButton.setBackgroundColor(Color.WHITE);
+                forceButton.setBackgroundColor(Color.GREEN);
             }
         });
 
@@ -73,6 +83,30 @@ public class SoundActivity extends Activity implements Runnable
             {
                 Intent myIntent = new Intent(currentView.getContext(), VideoActivity.class);
                 startActivityForResult(myIntent, 0);
+            }
+        });
+
+        pressStartButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                soundPlayer.stop();
+                soundPlayer = MediaPlayer.create(getBaseContext(), R.raw.mdk_press_start);
+                pressStartButton.setBackgroundColor(Color.GREEN);
+                forceButton.setBackgroundColor(Color.WHITE);
+            }
+        });
+
+        forceButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                soundPlayer.stop();
+                soundPlayer = MediaPlayer.create(getBaseContext(), R.raw.alanwalker_force);
+                forceButton.setBackgroundColor(Color.GREEN);
+                pressStartButton.setBackgroundColor(Color.WHITE);
             }
         });
 
